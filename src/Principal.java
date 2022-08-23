@@ -6,15 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- *
- * @author aluno
- */
 public class Principal {
     
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence
-                .createEntityManagerFactory("aula1PU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("aula1PU");
         
         
         Pessoa p1 = new Pessoa();
