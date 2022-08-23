@@ -1,4 +1,6 @@
 
+import br.edu.ifsp.pep.dao.CategoriaDAO;
+import br.edu.ifsp.pep.dao.ProdutoDAO;
 import br.edu.ifsp.pep.modelo.Categoria;
 import br.edu.ifsp.pep.modelo.Produto;
 import java.math.BigDecimal;
@@ -9,40 +11,65 @@ import javax.persistence.TypedQuery;
 
 
 public class TesteProdutoCategoria {
+    private static ProdutoDAO produtoDAO = new ProdutoDAO();
+    
     public static void main(String[] args) {
+        adicionarProdutos();
+        
+        reajustarPrecoProdutos(5);
+        
+        exibirProdutos();
+    }
+    
+    private static void teste(){
         EntityManager em = Persistence.createEntityManagerFactory("aula1PU").createEntityManager();
         
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
         
-        Categoria categoria = new Categoria();
-        categoria.setDescricao("Informática");
+        ProdutoDAO produtoDAO = new ProdutoDAO();
         
+    }
+    
+    private static void adicionarProdutos(){
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
         
-        Produto produto = new Produto();
-        produto.setDescricao("Teclado");
-        produto.setPreco(new BigDecimal(60.0));
-        produto.setQuantidade(100);
+        for(int i=0;i<10;i++){
+            Categoria categoria = new Categoria();
+            categoria.setDescricao("Categoria "+i);
+            categoriaDAO.inserir(categoria);
         
-        produto.setCategoria(categoria);
+            Produto produto = new Produto();
+            produto.setDescricao("Produto "+i);
+            produto.setPreco(new BigDecimal(60.0 * (i+1)));
+            produto.setQuantidade(100);
+            
+            produto.setCategoria(categoria);
+            
+            produtoDAO.inserir(produto);
+        }
+    }
+    
+    private static void reajustarPrecoProdutos(double porcentagem){
+        List<Produto> produtos = produtoDAO.buscar();
         
-        em.getTransaction().begin();
+        for(Produto produto : produtos){
+            float preco = produto.getPreco().floatValue();
+            produto.setPreco(new BigDecimal(preco + (preco * (porcentagem/100))));
+            produtoDAO.alterar(produto);
+        }
+    }
         
-        em.persist(categoria);
-        em.persist(produto);
-        
-        em.getTransaction().commit();
-        
-        // JPL
-        // Sempre pensar em classes
-        // SELECT p FROM Produto p
-        TypedQuery<Produto> query = em.createQuery("SELECT p FROM Produto p", Produto.class);
-        
-        List<Produto> produtos = query.getResultList();
+    private static void exibirProdutos(){
+        List<Produto> produtos = produtoDAO.buscar();
         
         for(Produto p : produtos){
             System.out.println("Descricao: "+p.getDescricao());
+            System.out.println("Preco: "+p.getPreco());
+            System.out.println("Quantidade: "+p.getQuantidade());
+            System.out.println("Categoria: "+p.getCategoria().getDescricao());
+            System.out.println("");
         }
-        
-        em.close();
-        
     }
+        
+    
 }
