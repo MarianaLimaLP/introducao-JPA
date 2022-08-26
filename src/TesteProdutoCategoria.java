@@ -5,9 +5,6 @@ import br.edu.ifsp.pep.modelo.Categoria;
 import br.edu.ifsp.pep.modelo.Produto;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 
 
 public class TesteProdutoCategoria {
@@ -20,7 +17,7 @@ public class TesteProdutoCategoria {
         
         exibirProdutos();
     }
-    
+    /*
     private static void teste(){
         EntityManager em = Persistence.createEntityManagerFactory("aula1PU").createEntityManager();
         
@@ -29,7 +26,7 @@ public class TesteProdutoCategoria {
         ProdutoDAO produtoDAO = new ProdutoDAO();
         
     }
-    
+    */
     private static void adicionarProdutos(){
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         
